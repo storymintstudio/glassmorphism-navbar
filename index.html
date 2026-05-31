@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Glass Navbar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    position:relative;
+}
+
+/* Background Image + Overlay */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.65)
+    ),
+url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=80');
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    z-index:-3;
+}
+
+/* Animated Glow Blobs */
+.blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    pointer-events:none;
+    animation:float 12s ease-in-out infinite;
+}
+
+.blob1{
+    width:450px;
+    height:450px;
+    background:rgba(200,255,0,.12);
+    top:-120px;
+    left:-120px;
+}
+
+.blob2{
+    width:400px;
+    height:400px;
+    background:rgba(120,80,255,.12);
+    bottom:-120px;
+    right:-120px;
+    animation-delay:2s;
+}
+
+.blob3{
+    width:300px;
+    height:300px;
+    background:rgba(0,200,255,.10);
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    animation-delay:4s;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-30px);
+    }
+}
+
+/* Navbar */
+nav{
+    position:relative;
+    display:flex;
+    gap:.25rem;
+    padding:6px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Active Slider */
+.slider{
+    position:absolute;
+    top:6px;
+    left:0;
+
+    height:calc(100% - 12px);
+    border-radius:999px;
+
+    background:#72bddb;
+
+    box-shadow:
+    0 0 20px rgba(112, 161, 193, 0.5),
+    0 0 40px rgba(99, 159, 174, 0.25);
+
+    transition:
+    left .55s cubic-bezier(.22,1.4,.36,1),
+    width .55s cubic-bezier(.22,1.4,.36,1);
+
+    z-index:0;
+}
+
+.slider::before{
+    content:"";
+    position:absolute;
+    inset:-5px;
+    border-radius:inherit;
+    background:#d0d0ce;
+    filter:blur(18px);
+    opacity:.45;
+}
+
+/* Links */
+nav a{
+    position:relative;
+    z-index:2;
+
+    text-decoration:none;
+    color:rgba(255,255,255,.65);
+
+    padding:.8rem 1.5rem;
+    border-radius:999px;
+
+    font-size:.95rem;
+    font-weight:500;
+
+    transition:
+    color .3s ease,
+    transform .3s ease;
+}
+
+nav a:hover{
+    color:#fff;
+}
+
+nav a.active{
+    color:#000;
+    font-weight:600;
+    transform:scale(1.05);
+}
+
+@media(max-width:700px){
+
+    nav{
+        width:95%;
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+
+    nav a{
+        padding:.7rem 1rem;
+        font-size:.85rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<nav id="navbar">
+    <a href="#" class="active">Home</a>
+    <a href="#">Projects</a>
+    <a href="#">Services</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+</nav>
+
+<script>
+const nav = document.getElementById("navbar");
+const links = nav.querySelectorAll("a");
+
+const slider = document.createElement("div");
+slider.classList.add("slider");
+nav.prepend(slider);
+
+function moveSlider(target){
+    slider.style.width = target.offsetWidth + "px";
+    slider.style.left = target.offsetLeft + "px";
+}
+
+window.addEventListener("load",()=>{
+    moveSlider(document.querySelector(".active"));
+});
+
+window.addEventListener("resize",()=>{
+    moveSlider(document.querySelector(".active"));
+});
+
+links.forEach(link=>{
+    link.addEventListener("click",(e)=>{
+        e.preventDefault();
+
+        links.forEach(item=>{
+            item.classList.remove("active");
+        });
+
+        link.classList.add("active");
+        moveSlider(link);
+    });
+});
+</script>
+
+</body>
+</html>
